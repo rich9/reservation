@@ -1,16 +1,10 @@
 import 'package:flutter/material.dart';
+import 'loginPge.dart';
 
-void main() => runApp(new MyApp());
+void main() => runApp(MaterialApp(
+  title: 'Reservation',
+  theme: ThemeData.dark().copyWith(
 
-class MyApp extends StatelessWidget {
-  // This widget is the root of your application.
-  @override
-  Widget build(BuildContext context) {
-    return new MaterialApp(
-      title: 'Flutter Demo',
-      theme: new ThemeData(
-
-      ),
-    );
-  }
-}
+  ),
+  home: LoginPage(),
+));
