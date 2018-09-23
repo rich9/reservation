@@ -6,6 +6,7 @@ import 'auth.dart';
 class AppScope extends InheritedWidget {
   final authInstance = AuthBloc();
   final userState = UserState();
+  final heroState = HeroState();
 
   AppScope({@required Widget child}) : super(child: child);
 
@@ -18,6 +19,10 @@ class AppScope extends InheritedWidget {
 
 class UserState {
   Firestore body = Firestore();
+}
+
+class HeroState {
+  Map<String, Color> test = {"first": Color(0)};
 }
 
 //

@@ -19,6 +19,7 @@ class HomePage extends StatelessWidget {
             _logoutButton(context),
           ],
         ),
+        drawer: drawer,
         body: Column(
           children: <Widget>[
             tabBar,
@@ -36,6 +37,22 @@ class HomePage extends StatelessWidget {
     );
   }
 }
+
+Drawer drawer = Drawer(
+  child: ListView(
+    children: <Widget>[
+      ListTile(
+        title: Text("Hello"),
+      ),
+      ListTile(
+        title: Text("World"),
+      ),
+      ListTile(
+        title: Text("!"),
+      ),
+    ],
+  ),
+);
 
 IconButton _logoutButton(context) => IconButton(
       icon: Icon(Icons.cancel),
@@ -106,22 +123,25 @@ Widget editTab = Builder(
 //  },
 //);
 
-StreamBuilder<QuerySnapshot> displayHome = StreamBuilder<QuerySnapshot>(
+StatefulWidget displayHome = StreamBuilder<QuerySnapshot>(
   stream: Firestore.instance.collection('Colors').snapshots(),
   builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
     if (!snapshot.hasData) return const Text('Loading...');
     print(snapshot.data.documentChanges);
     return GridView.count(
-      crossAxisCount: 3,
+      crossAxisCount: 1,
       children: snapshot.data.documents.map((DocumentSnapshot document) {
         Color color = Color(int.parse(document.data['Hex']));
         int newColor = 0x1FEFFFFFF - int.parse(document.data['Hex']);
         print(newColor);
-        return Material(
-          color: color,
-          child: ListTileTheme(
-            textColor: Color(newColor),
-            child: colorTile(document, context),
+        return Hero(
+          tag: 'heroTest' + document.documentID,
+          child: Material(
+            color: color,
+            child: ListTileTheme(
+              textColor: Color(newColor),
+              child: colorTile(document, context),
+            ),
           ),
         );
       }).toList(),
@@ -129,19 +149,45 @@ StreamBuilder<QuerySnapshot> displayHome = StreamBuilder<QuerySnapshot>(
   },
 );
 
-ListTile colorTile(DocumentSnapshot document, BuildContext context) {
-  int newColor = 0x1FEFFFFFF - int.parse(document.data['Hex']);
+colorTile(DocumentSnapshot document, BuildContext context) {
+  Color backgroundColor = Color(int.parse(document.data['Hex']));
+  Color textColor = Color(0x1FEFFFFFF - int.parse(document.data['Hex']));
+  return myColorTile(context,
+      title: document.documentID,
+      backgroundColor: backgroundColor,
+      textColor: textColor);
+}
+
+myColorTile(BuildContext context,
+    {@required String title,
+    @required Color backgroundColor,
+    @required Color textColor}) {
   return ListTile(
     onTap: () {
-      NavigatorState nav = Navigator.of(context);
-      Navigator.of(context).pushNamed(document.documentID);
+      AppScope.of(context).heroState.test = {title: backgroundColor};
+      Navigator.of(context).pushNamed('/home/changed');
     },
-    title: Text(document.documentID),
-    subtitle: Text("Text Color: 0x${newColor.toRadixString(16)}"),
+    title: Text(title),
+    subtitle: Text("Text Color: 0x${textColor.value.toRadixString(16)}"),
   );
 }
 
-class ExpandingListTile extends ListTile {
-  ExpandingListTile({@required title, @required subtitle})
-      : super(title: title, subtitle: subtitle);
+class Replaceable extends StatefulWidget {
+  Replaceable({@required this.child}) : super();
+  final Widget child;
+
+  @override
+  State createState() => ReplaceableState();
+}
+
+class ReplaceableState extends State<Replaceable> {
+  ReplaceableState();
+  static Widget child;
+
+  static void changeChild(Widget newChild) {
+    child = newChild;
+  }
+
+  @override
+  Widget build(BuildContext context) => child ?? widget.child;
 }

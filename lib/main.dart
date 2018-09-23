@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'home_page.dart';
+import 'home_page_changed.dart';
 import 'login_page.dart';
 import 'logout_page.dart';
 import 'scopes.dart';
@@ -34,6 +35,7 @@ class MyApp extends MaterialApp {
             '/splash': (context) => const SplashScreen(),
             '/home': (context) => const HomePage(),
             '/logout': (context) => const LogoutPage(),
+            '/home/changed': (context) => const HomePageChanged(),
           },
         );
 }
