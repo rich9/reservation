@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import 'scopes.dart';
 
 class LogoutPage extends StatelessWidget {
@@ -11,16 +12,28 @@ class LogoutPage extends StatelessWidget {
         title: Text("Logout"),
       ),
       body: Material(
-        child: Center(
-          child:
-            RaisedButton(
-              onPressed: () async{
-                Navigator.of(context).pushNamed('/splash');
-                await AuthScope.of(context).authInstance.logout();
-                Navigator.of(context).pushNamedAndRemoveUntil('/', (Route<dynamic> route)=>false);
-              },
-              child: Text("Logout!"),
-            )
+        child: SizedBox.expand(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              RaisedButton(
+                onPressed: () async {
+                  Navigator.of(context).pushNamed('/splash');
+                  await AppScope.of(context).authInstance.logout();
+                  Navigator.of(context).pushNamedAndRemoveUntil(
+                      '/', (Route<dynamic> route) => false);
+                },
+                child: Text("Logout!"),
+              ),
+              RaisedButton(
+                splashColor: Colors.green,
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: Text("Change something else"),
+              ),
+            ],
+          ),
         ),
       ),
     );

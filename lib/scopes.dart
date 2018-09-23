@@ -1,16 +1,25 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+
 import 'auth.dart';
-class AuthScope extends InheritedWidget{
 
+class AppScope extends InheritedWidget {
   final authInstance = AuthBloc();
+  final userState = UserState();
 
-  AuthScope({@required Widget child}):super(child: child);
+  AppScope({@required Widget child}) : super(child: child);
 
-  static AuthScope of(BuildContext context) => context.inheritFromWidgetOfExactType(AuthScope);
+  static AppScope of(BuildContext context) =>
+      context.inheritFromWidgetOfExactType(AppScope);
 
   @override
   bool updateShouldNotify(InheritedWidget oldWidget) => false;
 }
+
+class UserState {
+  Firestore body = Firestore();
+}
+
 //
 //class BodyScope extends InheritedWidget {
 //  final bodyCallback = _getBody();

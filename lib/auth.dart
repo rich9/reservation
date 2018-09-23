@@ -1,4 +1,5 @@
 import 'dart:async';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
@@ -9,17 +10,19 @@ class AuthBloc {
   static GoogleSignInAccount googleUser;
   static FirebaseUser currentUser;
 
-  Future<FirebaseUser> _loginWithGoogle() async{
+  Future<FirebaseUser> _loginWithGoogle() async {
     googleUser = await googleSignIn.signIn();
-    final GoogleSignInAuthentication googleAuth = await googleUser.authentication;
 
-    return await auth.signInWithGoogle(
+    final GoogleSignInAuthentication googleAuth =
+        await googleUser.authentication;
+
+    return auth.signInWithGoogle(
       accessToken: googleAuth.accessToken,
       idToken: googleAuth.idToken,
     );
   }
 
-  Future<void> login() async{
+  Future<void> login() async {
     FirebaseUser user = await _loginWithGoogle();
     assert(user.email != null);
     assert(user.displayName != null);
@@ -30,7 +33,7 @@ class AuthBloc {
     assert(user.uid == currentUser.uid);
   }
 
-  Future<void> logout() async{
+  Future<void> logout() async {
     googleUser = await googleSignIn.signOut();
     await auth.signOut();
   }

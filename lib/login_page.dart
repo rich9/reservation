@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'scopes.dart';
-class LoginPage extends StatelessWidget {
 
+import 'scopes.dart';
+
+class LoginPage extends StatelessWidget {
   const LoginPage();
 
   @override
@@ -42,7 +43,6 @@ const _emailAndPasswordLoginButton = _LoginButton(
   child: Text("Email and Password"),
 );
 
-
 class _LoginButton extends StatelessWidget {
   final Function onPressed;
   final Widget child;
@@ -52,13 +52,15 @@ class _LoginButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialButton(
       color: Theme.of(context).buttonColor,
-      onPressed: onPressed??() async {
-        Navigator.of(context).pushNamed('/splash');
-        await AuthScope.of(context).authInstance.login();
-        Navigator.of(context).pushNamedAndRemoveUntil('/home', (Route<dynamic> route)=>false);
-  },
-      minWidth: MediaQuery.of(context).size.width*.67,
-      child: child??Container(),
+      onPressed: onPressed ??
+          () async {
+            Navigator.of(context).pushNamed('/splash');
+            await AppScope.of(context).authInstance.login();
+            Navigator.of(context).pushNamedAndRemoveUntil(
+                '/home', (Route<dynamic> route) => false);
+          },
+      minWidth: MediaQuery.of(context).size.width * .67,
+      child: child ?? Container(),
     );
   }
 }
