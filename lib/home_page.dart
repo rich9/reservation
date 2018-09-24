@@ -10,8 +10,8 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     AppScope appScope = AppScope.of(context);
 
-    return DefaultTabController(
-      length: 2,
+    return Hero(
+      tag: "mainScaffold",
       child: Scaffold(
         appBar: AppBar(
           title: Text(appScope.authInstance.getUser().displayName),
@@ -20,18 +20,21 @@ class HomePage extends StatelessWidget {
           ],
         ),
         drawer: drawer,
-        body: Column(
-          children: <Widget>[
-            tabBar,
-            Expanded(
-              child: TabBarView(
-                children: [
-                  displayHome,
-                  editTab,
-                ],
+        body: DefaultTabController(
+          length: 2,
+          child: Column(
+            children: <Widget>[
+              tabBar,
+              Expanded(
+                child: TabBarView(
+                  children: [
+                    displayHome,
+                    editTab,
+                  ],
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
@@ -59,7 +62,7 @@ IconButton _logoutButton(context) => IconButton(
       onPressed: () => Navigator.of(context).pushNamed('/logout'),
     );
 
-TabBar tabBar = TabBar(tabs: [
+TabBar tabBar = const TabBar(tabs: [
   Tab(
     child: Text("Display"),
   ),
@@ -123,13 +126,12 @@ Widget editTab = Builder(
 //  },
 //);
 
-StatefulWidget displayHome = StreamBuilder<QuerySnapshot>(
-  stream: Firestore.instance.collection('Colors').snapshots(),
+Widget displayHome = FutureBuilder<QuerySnapshot>(
+  future: Firestore.instance.collection('Colors').getDocuments(),
   builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
     if (!snapshot.hasData) return const Text('Loading...');
-    print(snapshot.data.documentChanges);
     return GridView.count(
-      crossAxisCount: 1,
+      crossAxisCount: 3,
       children: snapshot.data.documents.map((DocumentSnapshot document) {
         Color color = Color(int.parse(document.data['Hex']));
         int newColor = 0x1FEFFFFFF - int.parse(document.data['Hex']);
@@ -164,7 +166,7 @@ myColorTile(BuildContext context,
     @required Color textColor}) {
   return ListTile(
     onTap: () {
-      AppScope.of(context).heroState.test = {title: backgroundColor};
+      AppScope.of(context).heroState.setTest({title: backgroundColor});
       Navigator.of(context).pushNamed('/home/changed');
     },
     title: Text(title),

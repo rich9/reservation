@@ -9,15 +9,20 @@ class HomePageChanged extends StatelessWidget {
   Widget build(BuildContext context) {
     AppScope appScope = AppScope.of(context);
 
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(appScope.authInstance.getUser().displayName),
-        actions: <Widget>[
-          _logoutButton(context),
-        ],
+    return Hero(
+      tag: "mainScaffold",
+      child: Scaffold(
+        appBar: AppBar(
+          leading: BackButton(
+            color: Colors.white,
+          ),
+          title: Text(appScope.authInstance.getUser().displayName),
+          actions: <Widget>[
+            _logoutButton(context),
+          ],
+        ),
+        body: newBody,
       ),
-      drawer: drawer,
-      body: newBody,
     );
   }
 }
@@ -51,11 +56,14 @@ Widget newBody = Builder(
             tag: 'heroTest' + AppScope.of(context).heroState.test.keys.first,
             child: Material(
               color: AppScope.of(context).heroState.test.values.first,
-              child: ListTile(
-                onTap: () => Navigator.of(context).pop(),
-                title: Text(AppScope.of(context).heroState.test.keys.first),
-                subtitle: Text(
-                    "Text Color: 0x${AppScope.of(context).heroState.test.values.first.value.toRadixString(16)}"),
+              child: ListTileTheme(
+                textColor: AppScope.of(context).heroState.textColor,
+                child: ListTile(
+                  onTap: () => Navigator.of(context).pop(),
+                  title: Text(AppScope.of(context).heroState.test.keys.first),
+                  subtitle: Text(
+                      "Text Color: 0x${AppScope.of(context).heroState.textColor.value.toRadixString(16)}"),
+                ),
               ),
             ),
           )

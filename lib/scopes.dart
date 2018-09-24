@@ -14,7 +14,7 @@ class AppScope extends InheritedWidget {
       context.inheritFromWidgetOfExactType(AppScope);
 
   @override
-  bool updateShouldNotify(InheritedWidget oldWidget) => false;
+  bool updateShouldNotify(InheritedWidget oldWidget) => true;
 }
 
 class UserState {
@@ -23,6 +23,16 @@ class UserState {
 
 class HeroState {
   Map<String, Color> test = {"first": Color(0)};
+  Color textColor;
+
+  setTest(Map<String, Color> value) {
+    this.test = value;
+    Color color = value.values.first;
+    this.textColor =
+        ((color.red / 255) + (2 * (color.green / 255)) + (color.blue / 255)) < 2
+            ? Colors.white
+            : Colors.black;
+  }
 }
 
 //
