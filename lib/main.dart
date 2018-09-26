@@ -6,9 +6,11 @@ import 'Home/home_page.dart';
 import 'Home/home_page_changed.dart';
 import 'Login/login_page.dart';
 import 'splash_screen.dart';
+import 'package:flutter_driver/driver_extension.dart';
 
 void main() {
   timeDilation = 5.0;
+  enableFlutterDriverExtension();
   runApp(AuthScope(
     child: MyApp(),
   ));
@@ -17,7 +19,7 @@ void main() {
 class MyApp extends MaterialApp {
   MyApp()
       : super(
-          title: 'Reservation',
+          title: 'Calder Creek Cabins',
           theme: ThemeData.dark().copyWith(
             primaryColor: Colors.green[900],
             accentColor: Colors.brown[500],

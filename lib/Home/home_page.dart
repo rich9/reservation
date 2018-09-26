@@ -4,6 +4,7 @@ import 'body.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({this.animateLeading = true});
+
   final animateLeading;
 
   @override
@@ -14,10 +15,16 @@ class HomePage extends StatelessWidget {
         child: AppBar(
 //        automaticallyImplyLeading: false,
           leading: Icon(Icons.menu),
-          title: Text("Hello!"),
+          title: Text(""),
         ),
       ),
-      body: const Body(),
+      body: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Image.asset('assets/images/cabin.png'),
+          ]
+      ),
     );
   }
 }
